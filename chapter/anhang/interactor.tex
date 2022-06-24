@@ -1,0 +1,35 @@
+\begin{lstlisting}[caption={Interactor - Rezept speichern},label={lst:saveRecipe_interactor}, language=kotlin]
+class SaveRecipe : KoinComponent {
+
+    fun execute(recipe: Recipe): Int? {
+        val recipeId = if (recipe.databaseId == null || recipe.databaseId == 0) {
+            recipeRepository.insertRecipe(mapper.mapBack(recipe))!!
+        } else {
+            recipeRepository.updateRecipe(mapper.mapBack(recipe))!!
+        }
+
+        recipe.ingredients.forEach {
+            val recipeIngredientDb = RecipeIngredientDb(
+                recipe_id = recipeId,
+                ingredient_id = it.internalId!!,
+                unit = it.unit,
+                quantity = it.quantity,
+            )
+            saveRecipeIngredient.execute(recipeIngredientDb)
+        }
+        return recipeId
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Interactor - Alle Zutaten laden},label={lst:interactor_getAllIngredients}, language=kotlin]
+class GetAllIngredients : KoinComponent {
+
+    private val ingredientRepository: IngredientRepository by inject()
+    private val mapper = IngredientListMapper()
+
+    fun execute(): List<Ingredient> {
+        return mapper.mapTo(ingredientRepository.getAllIngredients())
+    }
+}
+\end{lstlisting}

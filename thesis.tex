@@ -1,0 +1,79 @@
+% !TeX spellcheck = de-DE
+%-------------------------------------------------------------------------------
+%   LaTeX Vorlage für Wissenschaftliche Arbeiten an der Fachhochschule Erfurt
+%   Datum:   						2021-10-07
+%   Autor:   						Stephan Rothe
+%	Weiterentwicklung: 				Anja Haußen, Danny Steinbrecher
+%   email:   						anja.haussen@fh-erfurt.de
+%-------------------------------------------------------------------------------
+
+\include{system/preamble}
+
+%--------------------------------------
+%   Dokumentenbeginn
+%--------------------------------------
+\begin{document}
+    \include{chapter/titelseite}
+    \include{chapter/danksagung}
+    \include{chapter/abstract}
+
+% --- Ab hier in Röschen Zahlen nummerieren
+    \pagenumbering{Roman}
+
+%--------------------------------------
+%   Inhalts-, Abbildungs-, Tabellenverzeichnis
+%--------------------------------------
+%\pdfbookmark[0]{\contentsname}{tocanc}
+    \tableofcontents        % Inhalt
+    \listoffigures          % Abbildungen
+    %\listoftables           % Tabellen
+    \lstlistoflistings      % Listings
+
+    \cleardoublepage        % sichert korrekte Seitenzahlen
+
+%--------------------------------------
+%   Zähler für römische Nummerierung speichern
+%--------------------------------------
+    \newcounter{exterior}                       % neuer Zähler (leer)
+    \setcounter{exterior}{\value{page}}         % aktuelle Seitenzahl in neuen Zähler speichern
+
+% --- Ab hier in Arabische Zahlen nummerieren
+    \setcounter{page}{1}
+    \pagenumbering{arabic}
+
+    \include{chapter/architektur/0_architektur}
+    \include{chapter/fallbeispiel/0_fallbeispiel}
+    \include{chapter/bewertung/bewertung}
+
+
+% --- Ab hier in Röschen Zahlen nummerieren
+    \pagenumbering{Roman}
+    \setcounter{page}{\value{exterior}}
+
+%--------------------------------------
+%   Literaturverzeichnis mit BibLaTeX
+%--------------------------------------
+    \printbibliography
+
+%--------------------------------------
+%   Glossar
+%--------------------------------------
+    \printglossaries
+
+
+%--------------------------------------
+%   Anhang
+%--------------------------------------
+    \begin{appendix}
+        \include{chapter/anhang/0_anhang}
+    \end{appendix}
+
+%--------------------------------------
+%   Selbstständigkeitserklärung
+%--------------------------------------
+    \include{chapter/selbststaendigkeitserklaerung}
+
+\end{document}
+
+
+

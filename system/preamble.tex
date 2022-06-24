@@ -1,0 +1,143 @@
+%--------------------------------------
+%   Header
+%--------------------------------------
+\documentclass[
+    appendixprefix=true,
+    a4paper,                    % Papierformat A4
+    10pt,                       % Schriftgröße 10pt
+    headings=normal,            % kleinere Überschriften verwenden
+    chapterprefix=false,        % Einfügen von "Anhang" bzw. "Kapitel" in Überschrift
+    oneside,                    % oneside - twoside
+    openright,                  % einseitiges Layout
+    titlepage,                  % Titleseite verwenden
+    listof=totoc,               % alle Listen in das Inhaltsverzeichnis
+    headsepline,                % Trennlinie zum Seitenkopf Bereich headings
+    plainheadsepline,           % Trennlinie zum Seitenkopf Bereich Plain
+    bibliography=totoc,         % das Literaturverzeichnis in den TOC
+    parskip=half-,              % Abstand nach Absatz
+    numbers=noenddot,           % damit hinter der letzten Ziffer kein Punkt steht (Kapitelnummerierung)
+    %draft                      % Draft Modus - Zeigt überschreitungen vom Seitenrand und rendert das Dokument
+                                % schneller, da Bilder nur als Dummy dargestellt werden.
+]{scrreprt}
+
+%%--------------------------------------
+%%   Packages
+%%--------------------------------------
+\usepackage[utf8]{inputenc}        % Zeichenkodierung - !!!Achtung, alle Dateien auch im UTF8 speichern!!!
+\usepackage[T1]{fontenc}            % westeuropäische Schriftzeichenkodierung
+\usepackage[ngerman]{babel}        % Babel-System
+\usepackage[left=4cm, right=3cm, top=2.5cm, bottom=2.5cm]{geometry} % Seitenränder
+\usepackage{array}                    % erweiterte Tabelleneigenschaften
+\usepackage{graphicx}                % Grafiken
+\usepackage{subfigure}                % Grafiken nebeneinander mit (a) und (b)
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage{xspace}
+%\usepackage{hyperref}
+
+
+%%--------------------------------------
+%%   BibLateX - Literaturverzeichnis
+%%--------------------------------------
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{../bib/literatur.bib}
+
+
+%---------------------------------------
+%  Befehl für Schriftart Helvet / Arial
+%---------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[onehalfspacing]{setspace}    % 1,5 facher zeilen bastand aber nur im text nicht in Fußnoten oder verzeichnissen
+\usepackage{amssymb}        % Mathesymbole
+\usepackage{amsfonts}        % mathematische Schriftarten
+\usepackage{amsmath}        % Mathepaket
+\usepackage{cancel}            % Durchstreichungen wie beim kürzen
+\usepackage{mathcomp}        % weitere Symbole
+\usepackage{scrhack}        % verbessert einige Fremdklassen in Zusammenspiel mit KomaScript
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[ngerman]{translator}
+\usepackage{epstopdf}
+\usepackage{tikz}            % Für selbsterstellte Graphiken
+\usepackage{booktabs}        % Für schönere Tabellen
+
+
+%smaller spaces in lists
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+\setenumerate{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+
+%%--------------------------------------
+%%   Glossar
+%%--------------------------------------
+\usepackage[toc,acronym,nonumberlist]{glossaries}
+\makeglossaries
+
+
+%--------------------------------------
+%   PDF Lesezeichen und Hyperlinks
+%--------------------------------------
+\usepackage[
+pdfauthor={\autor},
+pdftitle={{\titel { - }\untertitel}},
+pdfsubject={{\titel { - }\untertitel}},
+pdfkeywords={\keywords},
+pdfpagelabels = {true},
+pdfstartview = {FitV},
+colorlinks = {true},
+linkcolor = {black},
+citecolor = {black},
+urlcolor = {blue},
+bookmarksopen = {true},
+bookmarksopenlevel = {3},
+bookmarksnumbered = {true},
+plainpages = {false},
+hypertexnames = {false}
+]{hyperref}
+
+
+%--------------------------------------
+%   Kopf- & Fußzeile 
+%--------------------------------------
+\usepackage[
+    automark,
+    plainheadsepline,
+    autooneside,
+    draft=false
+]{scrlayer-scrpage}
+
+\pagestyle{scrheadings}
+\clearpairofpagestyles                                  % Kopf und Fuzeile lschen
+\ihead[\hochschule]{\hochschule}                        % im Kopf -> links
+%\chead{\headmark}                                       % im Kopf -> mitte
+\ohead[\fachgebiet]{\fachgebiet}                        % im Kopf -> rechts
+\cfoot[\pagemark]{\pagemark}                            % Seitenzahl -cfoot für center - ofoot für outer
+\renewcommand*{\headfont}{\upshape\sffamily\scriptsize} % Schrift Kopfzeile
+\renewcommand*{\footfont}{\normalfont\sffamily\small}   % Schrift Fußzeile
+
+
+%--------------------------------------
+%   Quellcode-Listing Einstellungen
+%   ftp://ftp.tu-chemnitz.de/pub/tex/macros/latex/contrib/listings/listings.pdf
+%--------------------------------------
+\input{misc/listings/_imports.tex}
+\lstset{literate=%
+        {Ö}{{\"O}}1
+        {Ä}{{\"A}}1
+        {Ü}{{\"U}}1
+        {ß}{{\ss}}1
+        {ü}{{\"u}}1
+        {ä}{{\"a}}1
+        {ö}{{\"o}}1
+}
+
+\input{misc/worttrennung}
+\input{misc/keywords}
+\input{misc/ownFunctions}
+
+\makeindex
+
+\input{misc/metainformation}
+\input{misc/glossaryEntries}
+
+

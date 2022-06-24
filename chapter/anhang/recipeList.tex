@@ -1,0 +1,181 @@
+\begin{lstlisting}[caption={RecipeList Screen},label={lst:recipe_list_screen}, language=kotlin]
+@Composable
+fun RecipeListScreen(
+    recipeListState: RecipeListState,
+    navController: NavController,
+    onTriggerEvent: (RecipeListEvents) -> Unit,
+    onClickOpenRecipe: (Int) -> Unit,
+    onClickAddNewRecipe: () -> Unit
+) {
+    AppTheme(
+        displayProgressBar = recipeListState.isLoading,
+    ) {
+        Scaffold(
+            topBar = {
+                TopBar(title = "Rezeptliste")
+            },
+            bottomBar = { BottomBar(navController) },
+
+            floatingActionButtonPosition = FabPosition.End,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { onClickAddNewRecipe() },
+                    backgroundColor = MaterialTheme.colors.primary,
+                    elevation = FloatingActionButtonDefaults.elevation(6.dp)
+                ) {
+                    Icon(Icons.Filled.Add, "")
+                }
+            }
+
+
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                Column {
+                    SearchAppBar(
+                        query = recipeListState.query,
+                        onQueryChanged = {
+                            onTriggerEvent(RecipeListEvents.OnUpdateQuery(it))
+                        },
+                        onExecuteSearch = {
+                            onTriggerEvent(RecipeListEvents.NewSearch)
+                        },
+                    )
+
+                    RecipeList(
+                        loading = recipeListState.isLoading,
+                        recipes = recipeListState.recipes,
+                        page = recipeListState.page,
+                        onTriggerNextPage = {
+                            onTriggerEvent(RecipeListEvents.NextPage)
+                        },
+                        onClickOpenRecipe = onClickOpenRecipe
+                    )
+                }
+            }
+        }
+
+    }
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={RecipeList},label={lst:recipe_list}, language=kotlin]
+@Composable
+fun RecipeList(
+    loading: Boolean,
+    recipes: List<Recipe>,
+    page: Int,
+    onTriggerNextPage: () -> Unit,
+    onClickOpenRecipe: (Int) -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .background(color = MaterialTheme.colors.background)
+    ) {
+        if (loading && recipes.isEmpty()) {
+            LoadingRecipeListShimmer(imageHeight = 250.dp)
+        } else if (recipes.isEmpty()) {
+            NothingHere()
+        } else {
+            LazyColumn {
+                itemsIndexed(
+                    items = recipes
+                ) { index, recipe ->
+                    if ((index + 1) >= (page * PAGINATION_PAGE_SIZE) && !loading) {
+                        onTriggerNextPage()
+                    }
+                    RecipeCard(
+                        recipe = recipe,
+                        onClick = {
+                            onClickOpenRecipe(recipe.databaseId!!)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={Recipe Card},label={lst:recipe_card}, language=kotlin]
+@Composable
+fun RecipeCard(
+    recipe: Recipe, //TODO: change to Recipe
+    onClick: () -> Unit,
+) {
+    Card(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .padding(
+                bottom = 6.dp,
+                top = 6.dp,
+                start = 16.dp,
+                end = 16.dp
+            )
+            .fillMaxWidth(),
+        elevation = 8.dp,
+        backgroundColor = MaterialTheme.colors.surface
+    ) {
+        Column() {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                CircleImage(
+                    url = recipe.image ?: NO_IMAGE,
+                    contentDescription = recipe.name
+                )
+                Column {
+                    Text(
+                        text = recipe.name,
+                        modifier = Modifier
+                            .fillMaxWidth(0.85f)
+                            .wrapContentWidth(Alignment.Start),
+                        style = MaterialTheme.typography.h2
+                    )
+                    if (recipe.cooking_time != 0) {
+                        CustomChip("${recipe.cooking_time} ${recipe.cooking_time_unit}")
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+
+            ) {
+                CommonButton(
+                    text = "Öffnen",
+                    buttonStyle = ButtonStyle.OPEN_BUTTON,
+                    onClick = { onClick() },
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                CommonButton(
+                    text = "Hinzufügen",
+                    buttonStyle = ButtonStyle.ADD_BUTTON,
+                    onClick = {}
+                )
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={RecipeListEvents},label={lst:recipeListEvents}, language=kotlin]
+sealed class RecipeListEvents {
+    object LoadRecipe : RecipeListEvents()
+    object NewSearch : RecipeListEvents()
+    object NextPage : RecipeListEvents()
+    data class OnUpdateQuery(val query: String) : RecipeListEvents()
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={RecipeListState},label={lst:recipeListState}, language=kotlin]
+actual data class RecipeListState(
+    val isLoading: Boolean = false,
+    val page: Int = 1,
+    var query: String = "",
+    val recipes: List<Recipe> = listOf(),
+)
+\end{lstlisting}

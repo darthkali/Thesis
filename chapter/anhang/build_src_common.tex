@@ -1,0 +1,64 @@
+\begin{lstlisting}[caption={Build Src - Common Module},label={lst:build_src_common}, language=kotlin]
+kotlin {
+    android()
+
+    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
+        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
+            ::iosArm64
+        else
+            ::iosX64
+
+    iosTarget("ios") {}
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        ios.deploymentTarget = "14.1"
+        frameworkName = "shared"
+        podfile = project.file("../iosWeeFood/Podfile")
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(Ktor.core)
+                implementation(Ktor.clientSerialization)
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(Kotlin.commonTest)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(Ktor.android)
+                implementation(SQLDelight.androidDriver)
+            }
+        }
+
+        val androidTest by getting {
+            dependencies {
+                implementation(Kotlin.jvm)
+                implementation(Kotlin.junit)
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+                implementation(Ktor.ios)
+                implementation(SQLDelight.nativeDriver)
+                implementation(Koin.core)
+            }
+        }
+    }
+}
+
+sqldelight {
+    database("WeeFoodDatabase") {
+        packageName = "de.darthkali.weefood.datasource.database"
+        sourceFolders = listOf("sqldelight")
+    }
+}
+\end{lstlisting}

@@ -1,0 +1,56 @@
+\begin{lstlisting}[caption={Ktor Header},label={lst:ktor_header}, language=kotlin]
+val response: HttpResponse = client.get("https://ktor.io/") {
+    headers {
+        append(HttpHeaders.Accept, "text/html")
+        append(HttpHeaders.Authorization, "token")
+        append(HttpHeaders.UserAgent, "ktor client")
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Test},label={lst:test}, language=kotlin]
+@Test
+fun get_all_recipes_success() = runTest {
+    writeHead("get_all_recipes_success")
+    val recipes = recipeRepository.getAllRecipes()
+    recipes.forEachIndexed { index, recipe ->
+        println(recipe.toString())
+        assertEquals(
+            expected = RecipeMock.recipeListDb[index].name,
+            actual = recipe.name
+        )
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Buisnessmodel},label={lst:buisnessmodel}, language=kotlin]
+data class IngredientDb(
+    val id: Int = 0,
+    val name: String? = "",
+    val image: String? = "",
+    val apiId: Int
+)
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Mapper},label={lst:mapper}, language=kotlin]
+class IngredientMapper : BaseMapper<Ingredient, IngredientDto> {
+
+    override fun mapTo(db: IngredientDto): Ingredient {
+        return Ingredient(
+        apiId = db.apiId,
+        name = db.name,
+        image = db.image,
+        quantity = 0F,
+        unit = "",
+        )
+    }
+
+    override fun mapBack(internal: Ingredient): IngredientDto {
+        return IngredientDto(
+        apiId = internal.apiId,
+        name = internal.name,
+        image = internal.image,
+        )
+    }
+}
+    \end{lstlisting}

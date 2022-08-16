@@ -1,13 +1,13 @@
 % !TeX spellcheck = de-DE
 %-------------------------------------------------------------------------------
 %   LaTeX Vorlage für Wissenschaftliche Arbeiten an der Fachhochschule Erfurt
-%   Datum:   						2021-10-07
+%   Datum:   						2022-08-16
 %   Autor:   						Stephan Rothe
 %	Weiterentwicklung: 				Anja Haußen, Danny Steinbrecher
 %   email:   						anja.haussen@fh-erfurt.de
 %-------------------------------------------------------------------------------
 
-\include{system/preamble}
+\include{misc/preamble}
 
 %--------------------------------------
 %   Dokumentenbeginn
@@ -26,7 +26,7 @@
 %\pdfbookmark[0]{\contentsname}{tocanc}
     \tableofcontents        % Inhalt
     \listoffigures          % Abbildungen
-    %\listoftables           % Tabellen
+    \listoftables           % Tabellen
     \lstlistoflistings      % Listings
 
     \cleardoublepage        % sichert korrekte Seitenzahlen
@@ -64,9 +64,7 @@
 %--------------------------------------
 %   Anhang
 %--------------------------------------
-    \begin{appendix}
-        \include{chapter/anhang/0_anhang}
-    \end{appendix}
+    \include{chapter/anhang/0_anhang}
 
 %--------------------------------------
 %   Selbstständigkeitserklärung

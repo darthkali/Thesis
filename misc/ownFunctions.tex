@@ -15,7 +15,7 @@
 }
 
 \newcommand{\quotations}[1]{
-    \grqq #1\grqq
+    \glqq #1\grqq{}
 }
 
 
@@ -37,3 +37,11 @@
 \newcommand{\inlineCode}[1]{
     \colorbox{codeGray}{\textit{\lstinline|#1|}}
 }
+
+\newlist{tableitemize}{itemize}{2}
+\setlist[tableitemize, 1]{leftmargin=*, after=\vskip-\baselineskip,before=\vskip-\baselineskip, nosep,label=$\bullet$}
+\setlist[tableitemize, 2]{leftmargin=*, after=\vskip-\baselineskip,before=\minipagetrue, nosep,label=\circ}
+
+\newlist{tableenumerate}{enumerate}{2}
+\setlist[tableenumerate, 1]{leftmargin=*,nosep,label*=\arabic*.}
+\setlist[tableenumerate, 2]{leftmargin=*,nosep,label*=\arabic*.}

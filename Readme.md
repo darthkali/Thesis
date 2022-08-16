@@ -4,7 +4,7 @@
   - `MikTeX` installieren: https://miktex.org/download
   - `latexmk` in der MikTeX-Console als Paket installieren
 
-- **Mac:** 
+- **Mac:**
   - Mactex installieren: https://www.tug.org/mactex/mactex-download.html
   - `latexmk` in der TeX-Live-Utility  als Paket installieren
   - `latexmk` zur `$PATH` hinzufügen: `/Library/TeX/texbin`
